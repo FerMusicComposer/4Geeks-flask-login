@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 
@@ -8,14 +8,12 @@ export const Login = () => {
 	const { store, actions } = useContext(Context);
 	let History = useHistory();
 	const [loginData, setLoginData] = useState({ email: "", password: "" });
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 
 	const badLogin = {
-		title: "Atención",
-		text: "El usuario o contraseña ingresados son incorrectos",
+		title: "Warning!",
+		text: "The user or password entered are incorrect",
 		icon: "warning",
-		confirmButtonText: "cerrar"
+		confirmButtonText: "close"
 	};
 
 	const getLoginData = (attr, value) => {
