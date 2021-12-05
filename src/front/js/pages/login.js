@@ -6,7 +6,7 @@ import { Context } from "../store/appContext";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
-	let History = useHistory();
+
 	const [loginData, setLoginData] = useState({ email: "", password: "" });
 
 	const badLogin = {
