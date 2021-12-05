@@ -4,6 +4,8 @@ import ScrollToTop from "./component/scrollToTop";
 
 import { Login } from "./pages/login";
 import { Home } from "./pages/home";
+import { LoggedIn } from "./pages/loggedIn";
+import { Register } from "./pages/register";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -25,6 +27,12 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/login">
 							<Login />
+						</Route>
+						<Route exact path="/logged-in">
+							<LoggedIn />
+						</Route>
+						<Route exact path="/register">
+							<Register />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>

@@ -33,7 +33,17 @@ def login():
     user= User.get_user_by_email(email)
 
     if user is None or email != user.email or email is None or not bcrypt.checkpw(password, user.password.encode('utf8')):
-        return jsonify({"msg": "Bad username or password"}), 401
+        response_body = {
+            "msg": "Bad username or password"
+        }
+        print(response_body)
+        return jsonify(response_body), 401
         
     access_token = create_access_token(identity=user.id)
-    return jsonify({"user_id": user.id, "name": user.name, "token": access_token}), 200
+    response_body = {
+        "user_id": user.id,
+        "name": user.name,
+        "token": access_token
+    }
+    print(response_body)
+    return jsonify(response_body), 200

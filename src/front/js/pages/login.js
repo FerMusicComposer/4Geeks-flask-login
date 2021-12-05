@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 
 import { Context } from "../store/appContext";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
+	let History = useHistory();
 	const [loginData, setLoginData] = useState({ email: "", password: "" });
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -17,7 +19,6 @@ export const Login = () => {
 	};
 
 	const getLoginData = (attr, value) => {
-		console.log("loginData", attr, value);
 		setLoginData(prev => {
 			let logged_user = { ...prev };
 			logged_user[attr] = value;
@@ -26,7 +27,6 @@ export const Login = () => {
 		});
 	};
 
-	console.log(loginData);
 	const logUserIn = async (email, password) => {
 		if (email === "" || password === "") {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
@@ -42,6 +42,7 @@ export const Login = () => {
 		if (response.ok) {
 			let data = await response.json();
 			actions.setUserSession(data.token, data.user_id);
+			History.push("/logged-in");
 		} else {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
 		}
@@ -77,7 +78,7 @@ export const Login = () => {
 					/>
 				</div>
 
-				<button type="submit" className="btn btn-primary w-25 mx-auto" onClick={() => handleLogin()}>
+				<button type="submit" className="btn btn-primary w-25 mx-auto mb-3" onClick={() => handleLogin()}>
 					Login
 				</button>
 			</form>
