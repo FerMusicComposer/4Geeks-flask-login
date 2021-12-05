@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { useHistory } from "react-router";
+import { Redirect } from "react-router";
 
 import { Context } from "../store/appContext";
 
@@ -40,7 +40,7 @@ export const Login = () => {
 		if (response.ok) {
 			let data = await response.json();
 			actions.setUserSession(data.token, data.user_id);
-			History.push("/logged-in");
+			<Redirect to="/logged-in" />;
 		} else {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
 		}
