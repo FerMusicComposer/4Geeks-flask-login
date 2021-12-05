@@ -1,3 +1,17 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+body {
+    background-color: rgb(17, 30, 37);
+    color: cornsilk;
+    height: 100vh;
+    margin: 0;
+    
+}
+
+.blue-box {
+    background-color: rgb(58, 58, 124); 
+    margin-top: 30vh;
+    padding: 12px ; 
+    border-radius: 12px;
+}

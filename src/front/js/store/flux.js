@@ -1,46 +1,30 @@
+import Swal from "sweetalert2";
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			access_token: null,
+			user_id: null
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			setUserSession: (token, user_id) => {
+				localStorage.setItem("access_token", token);
+				localStorage.setItem("user_id", user_id);
+				setStore({ access_token: token });
+				setStore({ user_id: user_id });
 			},
-
-			getMessage: () => {
-				// fetching data from the backend
-				fetch(process.env.BACKEND_URL + "/api/hello")
-					.then(resp => resp.json())
-					.then(data => setStore({ message: data.message }))
-					.catch(error => console.log("Error loading message from backend", error));
+			deleteUserSession: () => {
+				localStorage.removeItem("user_id");
+				localStorage.removeItem("access_token");
+				setStore({ user_id: null });
+				setStore({ access_token: null });
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
+			notificationAlert: (title, text, icon, confirmButtonText) => {
+				Swal.fire({
+					title: title,
+					text: text,
+					icon: icon,
+					confirmButtonText: confirmButtonText
 				});
-
-				//reset the global store
-				setStore({ demo: demo });
 			}
 		}
 	};

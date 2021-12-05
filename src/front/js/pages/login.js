@@ -1,22 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import pinaPartidaNombre from "../../img/pina-partida-nombre.jpg";
+
 import { Context } from "../store/appContext";
-import { NormalInput } from "../component/normalInput";
-import { NormalInputPassword } from "../component/normalInputPassword";
-import { useHistory } from "react-router";
-import { ButtonType } from "../component/buttonType";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
 	const [loginData, setLoginData] = useState({ email: "", password: "" });
-	let History = useHistory();
-	const [passwordShown, setPasswordShown] = useState(false);
-	const togglePasswordVisiblity = () => {
-		setPasswordShown(passwordShown ? false : true);
-	};
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
 	const badLogin = {
 		title: "Atención",
@@ -26,6 +17,7 @@ export const Login = () => {
 	};
 
 	const getLoginData = (attr, value) => {
+		console.log("loginData", attr, value);
 		setLoginData(prev => {
 			let logged_user = { ...prev };
 			logged_user[attr] = value;
@@ -34,6 +26,7 @@ export const Login = () => {
 		});
 	};
 
+	console.log(loginData);
 	const logUserIn = async (email, password) => {
 		if (email === "" || password === "") {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
@@ -49,7 +42,6 @@ export const Login = () => {
 		if (response.ok) {
 			let data = await response.json();
 			actions.setUserSession(data.token, data.user_id);
-			History.push("/list-of-women");
 		} else {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
 		}
@@ -59,35 +51,35 @@ export const Login = () => {
 	};
 
 	return (
-		<div className="App-box">
-			<div className="signup-header">
-				<h1 className="question-text">¡Bienvenida de nuevo!</h1>
-				<div className="image-box">
-					<img className="piña-partida-sinnombre" src={pinaPartidaNombre} alt="dibujo piña partida" />
+		<div className="container  w-25">
+			<form className="d-flex flex-column justify-content-center blue-box">
+				<div className="mb-3">
+					<label htmlFor="exampleInputEmail1" className="form-label">
+						Email address
+					</label>
+					<input
+						type="email"
+						className="form-control"
+						id="exampleInputEmail1"
+						aria-describedby="emailHelp"
+						onChange={e => getLoginData("email", e.target.value)}
+					/>
 				</div>
-			</div>
+				<div className="mb-3">
+					<label htmlFor="exampleInputPassword1" className="form-label">
+						Password
+					</label>
+					<input
+						type="password"
+						className="form-control"
+						id="exampleInputPassword1"
+						onChange={e => getLoginData("password", e.target.value)}
+					/>
+				</div>
 
-			<form>
-				<NormalInput type="email" placeholder="email" value={loginData.email} set={getLoginData} attr="email" />
-				<NormalInputPassword
-					type={passwordShown ? "text" : "password"}
-					placeholder="Contraseña"
-					value={loginData.password}
-					set={getLoginData}
-					click={togglePasswordVisiblity}
-					attr="password"
-					icon={<FontAwesomeIcon icon={faEye} />}
-				/>
-				<div className="row">
-					<div className="col-12 col-md-6">
-						<ButtonType classN="button primary" type="button" value="Log In" onClick={handleLogin} />
-					</div>
-					<div className="col-12 col-md-6">
-						<Link to={"/signup-1"}>
-							<ButtonType classN="button secondary" type="button" value="Registrarse" />
-						</Link>
-					</div>
-				</div>
+				<button type="submit" className="btn btn-primary w-25 mx-auto" onClick={() => handleLogin()}>
+					Login
+				</button>
 			</form>
 		</div>
 	);
