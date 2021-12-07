@@ -11,13 +11,14 @@ import bcrypt
 api = Blueprint('api', __name__)
 
 
-@api.route("/create-user", methods=["POST"])
+@api.route("/create-user", methods=['POST'])
 def create_user():
     name = request.json.get("name")
     email =request.json.get("email")
     password = request.json.get("password").encode('utf8')
+    
     salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+    hashed_password = bcrypt.hashpw(password, salt)
     decoded_password = hashed_password.decode('utf8')
     user = User(name=name, email=email, password=decoded_password)
 
@@ -27,6 +28,7 @@ def create_user():
 
 @api.route('/login', methods=['POST'])
 def login():
+
     email = request.json.get("email", None)
     password = request.json.get("password", None).encode('utf8')
     
@@ -47,3 +49,7 @@ def login():
     }
     print(response_body)
     return jsonify(response_body), 200
+
+
+
+    

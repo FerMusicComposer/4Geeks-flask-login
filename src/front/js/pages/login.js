@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { Redirect } from "react-router";
+import { useHistory } from "react-router";
 
 import { Context } from "../store/appContext";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
-
-	const [loginData, setLoginData] = useState({ email: "", password: "" });
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	let History = useHistory();
 
 	const badLogin = {
 		title: "Warning!",
@@ -16,37 +17,32 @@ export const Login = () => {
 		confirmButtonText: "close"
 	};
 
-	const getLoginData = (attr, value) => {
-		setLoginData(prev => {
-			let logged_user = { ...prev };
-			logged_user[attr] = value;
-
-			return logged_user;
-		});
-	};
-
-	const logUserIn = async (email, password) => {
-		if (email === "" || password === "") {
+	const logUserIn = async e => {
+		e.preventDefault();
+		if (email.trim().length === 0 || password.trim().length === 0) {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
 		}
-		const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+
+		const fetchOptions = {
 			method: "POST",
-			headers: { "content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json"
+			},
 			body: JSON.stringify({
 				email: email,
 				password: password
 			})
-		});
+		};
+
+		const response = await fetch(`${process.env.BACKEND_URL}/api/login`, fetchOptions);
 		if (response.ok) {
-			let data = await response.json();
+			const data = await response.json();
 			actions.setUserSession(data.token, data.user_id);
-			<Redirect to="/logged-in" />;
+			History.push("/logged-in");
 		} else {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
 		}
-	};
-	const handleLogin = () => {
-		logUserIn(loginData.email, loginData.password);
 	};
 
 	return (
@@ -61,7 +57,7 @@ export const Login = () => {
 						className="form-control"
 						id="exampleInputEmail1"
 						aria-describedby="emailHelp"
-						onChange={e => getLoginData("email", e.target.value)}
+						onChange={e => setEmail(e.target.value)}
 					/>
 				</div>
 				<div className="mb-3">
@@ -72,11 +68,11 @@ export const Login = () => {
 						type="password"
 						className="form-control"
 						id="exampleInputPassword1"
-						onChange={e => getLoginData("password", e.target.value)}
+						onChange={e => setPassword(e.target.value)}
 					/>
 				</div>
 
-				<button type="submit" className="btn btn-primary w-25 mx-auto mb-3" onClick={() => handleLogin()}>
+				<button className="btn btn-primary w-25 mx-auto mb-3" onClick={e => logUserIn(e)}>
 					Login
 				</button>
 			</form>

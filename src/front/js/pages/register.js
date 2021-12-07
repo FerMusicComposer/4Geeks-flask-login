@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
-import { useHistory, Redirect } from "react-router";
+import { useHistory } from "react-router";
 
 export const Register = () => {
 	const { store, actions } = useContext(Context);
-	const [registryData, setRegistryData] = useState({ name: "", email: "", password: "" });
-	const [redirect, setRedirect] = useState(false);
+	const [name, setName] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	let History = useHistory();
 
 	const badRegistry = {
@@ -15,16 +16,8 @@ export const Register = () => {
 		confirmButtonText: "close"
 	};
 
-	const getRegistryInfo = (attr, value) => {
-		setRegistryData(prev => {
-			let registered_user = { ...prev };
-			registered_user[attr] = value;
-
-			return registered_user;
-		});
-	};
-
-	const registerUser = async (name, email, password) => {
+	const registerUser = async e => {
+		e.preventDefault();
 		if (name === "" || email === "" || password === "") {
 			actions.notificationAlert(
 				badRegistry.title,
@@ -44,17 +37,10 @@ export const Register = () => {
 			})
 		});
 		if (response.ok) {
-			setRedirect(true);
-			if (redirect) {
-				<Redirect to="/login" />;
-			}
+			History.push("/login");
 		} else {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);
 		}
-	};
-
-	const handleRegistry = () => {
-		registerUser(registryData.name, registryData.email, registryData.password);
 	};
 
 	return (
@@ -69,7 +55,7 @@ export const Register = () => {
 						className="form-control"
 						id="validationDefault01"
 						placeholder="Name"
-						onChange={e => getRegistryInfo("name", e.target.value)}
+						onChange={e => setName(e.target.value)}
 						required
 					/>
 				</div>
@@ -83,7 +69,7 @@ export const Register = () => {
 						id="exampleInputEmail1"
 						aria-describedby="emailHelp"
 						placeholder="example@email.com"
-						onChange={e => getRegistryInfo("email", e.target.value)}
+						onChange={e => setEmail(e.target.value)}
 						required
 					/>
 				</div>
@@ -96,12 +82,12 @@ export const Register = () => {
 						type="password"
 						className="form-control"
 						id="exampleInputPassword1"
-						onChange={e => getRegistryInfo("password", e.target.value)}
+						onChange={e => setPassword(e.target.value)}
 						required
 					/>
 				</div>
 
-				<button className="btn btn-primary w-25 mx-auto mb-3" type="submit" onClick={handleRegistry}>
+				<button className="btn btn-primary w-25 mx-auto mb-3" type="submit" onClick={e => registerUser(e)}>
 					Register
 				</button>
 			</form>

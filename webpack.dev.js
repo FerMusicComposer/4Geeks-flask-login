@@ -17,7 +17,7 @@ module.exports = merge(common, {
     devtool: 'cheap-module-source-map',
     devServer: {
         contentBase:  './dist',
-        hot: true,
+        hot: false,
         disableHostCheck: true,
         historyApiFallback: true,
         public: publicUrl
