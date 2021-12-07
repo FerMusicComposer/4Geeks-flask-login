@@ -39,6 +39,7 @@ export const Login = () => {
 		if (response.ok) {
 			const data = await response.json();
 			actions.setUserSession(data.token, data.user_id);
+			actions.setIsLoggedIn(true);
 			History.push("/logged-in");
 		} else {
 			actions.notificationAlert(badLogin.title, badLogin.text, badLogin.icon, badLogin.confirmButtonText);

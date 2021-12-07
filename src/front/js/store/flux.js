@@ -3,9 +3,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			access_token: null,
-			user_id: null
+			user_id: null,
+			isLoggedIn: false
 		},
 		actions: {
+			setIsLoggedIn: bool => {
+				setStore({ isLoggedIn: bool });
+			},
 			setUserSession: (token, user_id) => {
 				localStorage.setItem("access_token", token);
 				localStorage.setItem("user_id", user_id);
