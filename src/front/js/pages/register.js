@@ -18,7 +18,7 @@ export const Register = () => {
 
 	const registerUser = async e => {
 		e.preventDefault();
-		if (name === "" || email === "" || password === "") {
+		if (name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0) {
 			actions.notificationAlert(
 				badRegistry.title,
 				badRegistry.text,
